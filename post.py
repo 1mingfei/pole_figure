@@ -151,10 +151,12 @@ def atom_pole(n,nnn,nb1,nb3):
     ax.set_aspect('equal')
     ax.set_xlim((-1, 1))
     ax.set_ylim((-1, 1))
+    plt.axis('off')
     #ax.legend()
     #plt.show()
     plt.savefig('pole_fig.png')
     plt.close()
+
     return
 
 
