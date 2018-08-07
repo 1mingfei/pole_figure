@@ -158,7 +158,7 @@ def select_surface(file_in,nnn,nb1,nb3,cn):
 #pole_single(1,1,110)
 
 file_in='Ag.cfg'
-cutoff=3.25
+cutoff=3.5
 nnn,nb1,nb2,nb3=save_nb_list(file_in,cutoff)
 select_surface(file_in,nnn,nb1,nb3,9)
 
