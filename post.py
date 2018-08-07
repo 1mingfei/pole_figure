@@ -9,33 +9,11 @@ def save_nb_list(file_in,NBL_file,cutoff):
     atoms = read(file_in)
     nblist=neighborlist.neighbor_list('ijD', atoms, cutoff)
     np.savez(NBL_file,nblist[0],nblist[1],nblist[2])
-    return
-
-def read_nb_list(NBL_file):
-    nblist = np.load(NBL_file)
-    listsize=len(nblist['arr_1'])
-    nnn = np.bincount(nblist['arr_0']) #number of nearesr neighbors
-    #for i in range(len(nnn)):
-    #    print(i,nnn[i])
-    #import matplotlib.pyplot as plt
-    #plt.hist(nnn, bins='auto')
-    #plt.savefig('cn_dist.eps')
-    #for i in range(listsize):
-    #    print(i,nblist['arr_0'][i],nblist['arr_1'][i],nblist['arr_2'][i])
-    return(nnn,nblist['arr_0'],nblist['arr_1'],nblist['arr_2'])
-
-def select_surface(file_in,nnn,cn):
-    aa=fx.info(file_in,'cfg',1)
-    data=aa.data     
-    n_type=aa.atom_type_num
-    lst=np.argwhere(nnn <= cn)
-    tot_num=len(lst)
-    lst=lst.flatten()
-    data_new=data[lst,:]
-    aa.data=data_new
-    aa.tot_num=tot_num
-    aa.get_cfg_file('surface.cfg')
-    return
+    nnn = np.bincount(nblist[0]) #number of nearesr neighbors
+    import matplotlib.pyplot as plt
+    plt.hist(nnn, bins='auto')
+    plt.savefig('cn_dist.eps')
+    return(nnn,nblist[0],nblist[1],nblist[2])
 
 def pole_single(ori_0,ori,pole_family):
     if pole_family==111:
@@ -128,6 +106,7 @@ def atom_pole(n,nnn,nb1,nb3):
         i+=1
         if (i==len(lst)):
             break
+
     h_prim=np.asarray(h_prim)
     #calculate pole figure px py 
     theta=np.arccos(h_prim.T[2,:])
@@ -159,6 +138,21 @@ def atom_pole(n,nnn,nb1,nb3):
 
     return
 
+def select_surface(file_in,nnn,nb1,nb3,cn):
+    aa=fx.info(file_in,'cfg',1)
+    data=aa.data     
+    n_type=aa.atom_type_num
+    lst=np.argwhere(nnn <= cn)
+    tot_num=len(lst)
+    lst=lst.flatten()
+    data_new=data[lst,:]
+    aa.data=data_new
+    aa.tot_num=tot_num
+    aa.get_cfg_file('surface.cfg')
+    return
+
+
+
 
 #pole_single(1,1,111)
 #pole_single(1,1,100)
@@ -166,10 +160,9 @@ def atom_pole(n,nnn,nb1,nb3):
 
 file_in='Ag.cfg'
 NBL_file='NBL.npz'
-#cutoff=3.25
-#save_nb_list(file_in,NBL_file,cutoff)
-nnn,nb1,nb2,nb3=read_nb_list(NBL_file)
-#select_surface(file_in,nnn,8)
+cutoff=3.25
+nnn,nb1,nb2,nb3=save_nb_list(file_in,NBL_file,cutoff)
+select_surface(file_in,nnn,nb1,nb3,9)
 
 n=5000
 atom_pole(n,nnn,nb1,nb3)
