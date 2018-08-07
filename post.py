@@ -5,10 +5,9 @@ from ase  import neighborlist
 import formatxfer as fx
 from sklearn import preprocessing
 
-def save_nb_list(file_in,NBL_file,cutoff):
+def save_nb_list(file_in,cutoff):
     atoms = read(file_in)
     nblist=neighborlist.neighbor_list('ijD', atoms, cutoff)
-    #np.savez(NBL_file,nblist[0],nblist[1],nblist[2])
     nnn = np.bincount(nblist[0]) #number of nearesr neighbors
     import matplotlib.pyplot as plt
     plt.hist(nnn, bins='auto')
@@ -159,9 +158,8 @@ def select_surface(file_in,nnn,nb1,nb3,cn):
 #pole_single(1,1,110)
 
 file_in='Ag.cfg'
-NBL_file='NBL.npz'
 cutoff=3.25
-nnn,nb1,nb2,nb3=save_nb_list(file_in,NBL_file,cutoff)
+nnn,nb1,nb2,nb3=save_nb_list(file_in,cutoff)
 select_surface(file_in,nnn,nb1,nb3,9)
 
 n=5000
