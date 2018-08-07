@@ -8,7 +8,7 @@ from sklearn import preprocessing
 def save_nb_list(file_in,NBL_file,cutoff):
     atoms = read(file_in)
     nblist=neighborlist.neighbor_list('ijD', atoms, cutoff)
-    np.savez(NBL_file,nblist[0],nblist[1],nblist[2])
+    #np.savez(NBL_file,nblist[0],nblist[1],nblist[2])
     nnn = np.bincount(nblist[0]) #number of nearesr neighbors
     import matplotlib.pyplot as plt
     plt.hist(nnn, bins='auto')
